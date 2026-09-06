@@ -2,7 +2,7 @@ package com.handson.initial.tests;
 
 import com.microsoft.playwright.*;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,17 +17,31 @@ public class LaunchBrowserOfChoice {
         Playwright playwright = Playwright.create();
         Browser browser = null;
         Page page = null;
-        List<String> browserArgs = new ArrayList<>();
-        browserArgs.add("--start-maximized");
 
         try {
             if (userInput.equalsIgnoreCase("c")) {
-                browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false).setChannel("chrome").setArgs(browserArgs));
+                browser = playwright.chromium().launch(
+                                new BrowserType.LaunchOptions()
+                                        .setHeadless(false)
+                                        .setChannel("chrome")
+                                        .setArgs(List.of("--start-maximized"))
+                );
 
             } else if (userInput.equalsIgnoreCase("f")) {
-                browser = playwright.firefox().launch(new BrowserType.LaunchOptions().setHeadless(false).setChannel("firefox").setArgs(browserArgs));
+                browser = playwright.firefox().launch(
+                                new BrowserType.LaunchOptions()
+                                        .setHeadless(false)
+                );
             } else {
-                System.out.println("try with given browser options");
+                browser = playwright.chromium().launch(
+                                new BrowserType.LaunchOptions()
+                                        .setHeadless(false)
+                                        .setChannel("msedge")
+                                        .setArgs(List.of("--start-maximized"))
+                );
+
+
+                System.out.println("using edge as the last option, without erroring out");
             }
 
             BrowserContext browserContext = browser.newContext(new Browser.NewContextOptions().setViewportSize(null));
@@ -35,7 +49,7 @@ public class LaunchBrowserOfChoice {
             page.navigate("https://www.stackoverflow.com");
 
         }catch (Exception e){
-            System.out.println("some issue happened");
+            e.printStackTrace();
         }finally{
             page.close();
             playwright.close();
