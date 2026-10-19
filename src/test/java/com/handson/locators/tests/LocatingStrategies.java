@@ -32,7 +32,7 @@ public class LocatingStrategies {
         gmailLoginPage.click("button:has-text('Next')");
         gmailLoginPage.locator("[type=password]").fill("test");
         gmailLoginPage.click("button:has-text('Next')");
-        System.out.println(gmailLoginPage.getByText("Wrong password. Try again or click \"Forgot password?\" for more options."));
+        gmailLoginPage.locator("text=Wrong password. Try again or click \"Forgot password?\" for more options.").click();
         gmailLoginPage.close();
         playwrightSession.close();
 
